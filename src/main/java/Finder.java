@@ -24,6 +24,9 @@ public class Finder {
                 result = stringBuilder.append(strings[i]).append(" ").toString();
             }
         }
+        if(result.isEmpty()){
+            return new String[0];
+        }
         return result.split(" ");
     }
 

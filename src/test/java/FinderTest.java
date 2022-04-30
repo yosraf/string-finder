@@ -37,6 +37,54 @@ public class FinderTest {
 
     }
     @Test
+    @DisplayName("givenUpperCaseStringWhenFindThenReturnMatches")
+    public void givenUpperCaseStringWhenFindThenReturnMatches() {
+        //***** Given
+        // good string
+        String s1 = "CBD";
+        // good array string
+        String[] strings = new String[5];
+        strings[0] = "cbd";
+        strings[1] = "dbc";
+        strings[2] = "dbcer";
+        strings[3] = "bCD";
+        strings[4] = "BdC";
+        this.finder = new Finder(strings);
+
+        //***** When
+        String[] result = finder.find(s1);
+
+        //***** Then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(4, result.length);
+
+
+    }
+    @Test
+    @DisplayName("givenGoodStringWhenFindThenReturnEmptyMatch")
+    public void givenGoodStringWhenFindThenReturnEmpty() {
+        //***** Given
+        // good string
+        String s1 = "none";
+        // good array string
+        String[] strings = new String[5];
+        strings[0] = "asd";
+        strings[1] = "asdd";
+        strings[2] = "fre";
+        strings[3] = "glk";
+        strings[4] = "lkm";
+        this.finder = new Finder(strings);
+
+        //***** When
+        String[] result = finder.find(s1);
+
+        //***** Then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(0, result.length);
+
+
+    }
+    @Test
     @DisplayName("givenGoodStringWhenFindThenReturnMatches")
     public void givenGoodStringWhenFindThenReturnMatches() {
         //***** Given
