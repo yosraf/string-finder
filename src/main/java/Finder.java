@@ -1,11 +1,35 @@
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 public class Finder {
 
     private String[] strings;
 
     public Finder(String[] strings) {
-        this.strings = strings;
+        this.strings = preproccess(strings);
+    }
+
+    /**
+     * Validates input
+     * removes redundant strings
+     * rempves null strings
+     * removes empty strings
+     * removes blank strings
+     *
+     * @param strings string array to preproccess
+     * @return preprocessed string array
+     **/
+
+    private String[] preproccess(String[] strings) {
+        if (strings == null) {
+            throw new IllegalArgumentException("string array could not be null");
+        }
+        if (strings.length == 0) {
+            throw new IllegalArgumentException("string array could not be empty");
+        }
+        return Arrays.stream(strings).filter(Objects::nonNull).filter(Predicate.not(String::isBlank)).filter(Predicate.not(String::isEmpty))
+                .distinct().toArray(String[]::new);
     }
 
     /**
@@ -16,44 +40,21 @@ public class Finder {
      **/
     public String[] find(String string) {
         validate(string);
-        int length = strings.length;
-        String result = "";
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            if (compareIgnoreOrder(strings[i], string)) {
-                result = stringBuilder.append(strings[i]).append(" ").toString();
-            }
-        }
-        if(result.isEmpty()){
-            return new String[0];
-        }
-        return result.split(" ");
+        return Arrays.stream(this.strings).filter(s -> s.length() == string.length() && sort(s).equalsIgnoreCase(sort(string))
+        ).toArray(String[]::new);
     }
 
     /**
-     * comapres the equality of two strings regardless their order
+     * Sorts a given string by its ASCII codes
      *
-     * @param s1
-     * @param s2
-     * @return true or false
+     * @param string to be sorted
+     * @return sorted string
      **/
-
-    private boolean compareIgnoreOrder(String s1, String s2) {
-
-        if (s1.length() != s2.length()) {
-            return false;
-        }
-        // converting s1 and s2 to char arrays
-        char[] char1 = s1.toLowerCase().toCharArray();
-        char[] char2 = s2.toLowerCase().toCharArray();
-
-        // sorting arrays
-        Arrays.sort(char1);
-        Arrays.sort(char2);
-
-        // comparing
-        return Arrays.equals(char1, char2);
-
+    private String sort(String string) {
+        return string.toLowerCase().chars()
+                .sorted()
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 
     /**
@@ -62,12 +63,7 @@ public class Finder {
      * @throws IllegalArgumentException when input is invalid
      **/
     private void validate(String string) {
-        if (this.strings == null) {
-            throw new IllegalArgumentException("string array could not be null");
-        }
-        if (this.strings.length == 0) {
-            throw new IllegalArgumentException("string array could not be empty");
-        }
+
         if (string == null) {
             throw new IllegalArgumentException("string input could not be null");
         }

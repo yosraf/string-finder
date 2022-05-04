@@ -6,10 +6,10 @@ public class FinderTest {
 
     private Finder finder;
 
-    private static final String NULL_STRING_COULD_NOT_BE_NULL_MSG="string input could not be null";
-    private static final String NULL_ARRAY_STRING_COULD_NOT_BE_NULL_MSG="string array could not be null";
-    private static final String EMPTY_ARRAY_STRING_COULD_NOT_BE_NULL_MSG="string array could not be empty";
-    private static final String EMPTY_STRING_COULD_NOT_BE_NULL_MSG="string input could not be empty";
+    private static final String NULL_STRING_COULD_NOT_BE_NULL_MSG = "string input could not be null";
+    private static final String NULL_ARRAY_STRING_COULD_NOT_BE_NULL_MSG = "string array could not be null";
+    private static final String EMPTY_ARRAY_STRING_COULD_NOT_BE_NULL_MSG = "string array could not be empty";
+    private static final String EMPTY_STRING_COULD_NOT_BE_NULL_MSG = "string input could not be empty";
 
     @Test
     @DisplayName("givenGoodStringWhenFindThenReturnOneMatch")
@@ -37,6 +37,32 @@ public class FinderTest {
 
     }
     @Test
+    @DisplayName("givenGoodStringWAndDuplicatesEntriesWhenFindThenReturnOneMatch")
+    public void givenGoodStringWAndDuplicatesEntriesWhenFindThenReturnOneMatch() {
+        //***** Given
+        // good string
+        String s1 = "sad";
+        // good array string
+        String[] strings = new String[5];
+        strings[0] = "sad";
+        strings[1] = "sad";
+        strings[2] = "sad";
+        strings[3] = "sad";
+        strings[4] = "sad";
+        this.finder = new Finder(strings);
+
+        //***** When
+        String[] result = finder.find(s1);
+
+        //***** Then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(1, result.length);
+        Assertions.assertEquals("sad", result[0]);
+
+    }
+
+
+    @Test
     @DisplayName("givenUpperCaseStringWhenFindThenReturnMatches")
     public void givenUpperCaseStringWhenFindThenReturnMatches() {
         //***** Given
@@ -60,6 +86,7 @@ public class FinderTest {
 
 
     }
+
     @Test
     @DisplayName("givenGoodStringWhenFindThenReturnEmptyMatch")
     public void givenGoodStringWhenFindThenReturnEmpty() {
@@ -85,11 +112,34 @@ public class FinderTest {
 
     }
     @Test
+    @DisplayName("givenGoodStringAndNullAndDuplicatesEntriesWhenFindThenReturnEmpty")
+    public void givenGoodStringAndNullAndDuplicatesEntriesWhenFindThenReturnEmpty() {
+        //***** Given
+        // good string
+        String s1 = "none";
+        // good array string with empty or null elements
+        String[] strings = new String[3];
+        strings[0] = " ";
+        strings[1] = "";
+        strings[2] = null;
+        this.finder = new Finder(strings);
+
+        //***** When
+        String[] result = finder.find(s1);
+
+        //***** Then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(0, result.length);
+
+
+    }
+
+    @Test
     @DisplayName("givenGoodStringWhenFindThenReturnMatches")
     public void givenGoodStringWhenFindThenReturnMatches() {
         //***** Given
         // good string
-        String s1 = "sad";
+        String s1 = "asd";
         // good array string
         String[] strings = new String[15];
         strings[0] = "asd";
@@ -97,7 +147,7 @@ public class FinderTest {
         strings[2] = "das";
         strings[3] = "glk";
         strings[4] = "lkm";
-        strings[5] = "asd";
+        strings[5] = "dsa";
         strings[6] = "asdd";
         strings[7] = "fre";
         strings[8] = "glk";
@@ -114,9 +164,10 @@ public class FinderTest {
 
         //***** Then
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, result.length);
+        Assertions.assertEquals(4, result.length);
 
     }
+
     @Test
     @DisplayName("givenNullStringWhenFindThenThrowIllegalArgumentException")
     public void givenNullStringWhenFindThenThrowIllegalArgumentException() {
@@ -130,15 +181,16 @@ public class FinderTest {
         this.finder = new Finder(strings);
 
 
-        IllegalArgumentException exception =Assertions.assertThrows(IllegalArgumentException.class,()->{
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             //***** When
             finder.find(s1);
         });
 
         //**** Then
-        Assertions.assertEquals(NULL_STRING_COULD_NOT_BE_NULL_MSG,exception.getMessage());
+        Assertions.assertEquals(NULL_STRING_COULD_NOT_BE_NULL_MSG, exception.getMessage());
 
     }
+
     @Test
     @DisplayName("givenEmptyStringWhenFindThenThrowIllegalArgumentException")
     public void givenEmptyStringWhenFindThenThrowIllegalArgumentException() {
@@ -152,15 +204,16 @@ public class FinderTest {
         this.finder = new Finder(strings);
 
 
-        IllegalArgumentException exception =Assertions.assertThrows(IllegalArgumentException.class,()->{
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             //***** When
             finder.find(s1);
         });
 
         //**** Then
-        Assertions.assertEquals(EMPTY_STRING_COULD_NOT_BE_NULL_MSG,exception.getMessage());
+        Assertions.assertEquals(EMPTY_STRING_COULD_NOT_BE_NULL_MSG, exception.getMessage());
 
     }
+
     @Test
     @DisplayName("givenEmptyStringArrayWhenFindThenThrowIllegalArgumentException")
     public void givenEmptyStringArrayWhenFindThenThrowIllegalArgumentException() {
@@ -170,18 +223,17 @@ public class FinderTest {
         // empty array string
         String[] strings = new String[0];
 
-        this.finder = new Finder(strings);
 
-
-        IllegalArgumentException exception =Assertions.assertThrows(IllegalArgumentException.class,()->{
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             //***** When
-            finder.find(s1);
+            this.finder = new Finder(strings);
         });
 
         //**** Then
-        Assertions.assertEquals(EMPTY_ARRAY_STRING_COULD_NOT_BE_NULL_MSG,exception.getMessage());
+        Assertions.assertEquals(EMPTY_ARRAY_STRING_COULD_NOT_BE_NULL_MSG, exception.getMessage());
 
     }
+
     @Test
     @DisplayName("givenNulltringArrayWhenFindThenThrowIllegalArgumentException")
     public void givenNullStringArrayWhenFindThenThrowIllegalArgumentException() {
@@ -190,17 +242,13 @@ public class FinderTest {
         String s1 = "asb";
         // null array string
         String[] strings = null;
-
-        this.finder = new Finder(strings);
-
-
-        IllegalArgumentException exception =Assertions.assertThrows(IllegalArgumentException.class,()->{
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             //***** When
-            finder.find(s1);
+            this.finder = new Finder(strings);
         });
 
         //**** Then
-        Assertions.assertEquals(NULL_ARRAY_STRING_COULD_NOT_BE_NULL_MSG,exception.getMessage());
+        Assertions.assertEquals(NULL_ARRAY_STRING_COULD_NOT_BE_NULL_MSG, exception.getMessage());
 
     }
 }
